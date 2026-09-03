@@ -90,8 +90,8 @@ void Config_Load(const char* iniName)
     g_cfg.btnY     = GetI("Buttons", "Y",     g_cfg.btnY,     p);
     g_cfg.btnLB    = GetI("Buttons", "LB",    g_cfg.btnLB,    p);
     g_cfg.btnRB    = GetI("Buttons", "RB",    g_cfg.btnRB,    p);
-    //g_cfg.btnLT    = GetI("Buttons", "LT",    g_cfg.btnLT,    p);
-    //g_cfg.btnRT    = GetI("Buttons", "RT",    g_cfg.btnRT,    p);
+    g_cfg.btnLT    = GetI("Buttons", "LT",    g_cfg.btnLT,    p);
+    g_cfg.btnRT    = GetI("Buttons", "RT",    g_cfg.btnRT,    p);
     g_cfg.btnBack  = GetI("Buttons", "Back",  g_cfg.btnBack,  p);
     g_cfg.btnStart = GetI("Buttons", "Start", g_cfg.btnStart, p);
     g_cfg.btnLS    = GetI("Buttons", "LS",    g_cfg.btnLS,    p);
