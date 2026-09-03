@@ -282,8 +282,8 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
     };
 
     // --- movement: left stick -> X / Y ---
-    float lx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTX) / 32767.f;
-    float ly = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTY) / 32767.f;
+    float lx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTX) / 32767.f;
+    float ly = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTY) / 32767.f;
     ApplyMaxInput(lx, ly, g_cfg.moveMaxRange);
     RadialDeadzone(lx, ly, g_cfg.moveDeadzone);
     AxisSnap(lx, ly);
@@ -295,8 +295,8 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
     // CameraSensitivity is a percent where 50 = normal speed (1.0x).
     float camMul = g_cfg.cameraSensitivity / 50.f;
     if (camMul < 0.f) camMul = 0.f;
-    float rx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTX) / 32767.f;
-    float ry = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTY) / 32767.f;
+    float rx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTX) / 32767.f;
+    float ry = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTY) / 32767.f;
     ApplyMaxInput(rx, ry, g_cfg.cameraMaxRange);
     RadialDeadzone(rx, ry, g_cfg.cameraDeadzone);
     AxisSnap(rx, ry);
@@ -329,14 +329,16 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
         int ofs = 48 + idx;   // standard rgbButtons (buffer is game-format)
         if (ofs >= 0 && ofs < (int)sizeof(DIJOYSTATE)) base[ofs] = 0x80;
     };
-    set(SDL_CONTROLLER_BUTTON_A,             g_cfg.btnA);
-    set(SDL_CONTROLLER_BUTTON_B,             g_cfg.btnB);
-    set(SDL_CONTROLLER_BUTTON_X,             g_cfg.btnX);
-    set(SDL_CONTROLLER_BUTTON_Y,             g_cfg.btnY);
+    set(SDL_CONTROLLER_BUTTON_A,             g_cfg.btnX);
+    set(SDL_CONTROLLER_BUTTON_B,             g_cfg.btnY);
+    set(SDL_CONTROLLER_BUTTON_X,             g_cfg.btnA);
+    set(SDL_CONTROLLER_BUTTON_Y,             g_cfg.btnB);
     set(SDL_CONTROLLER_BUTTON_LEFTSHOULDER,  g_cfg.btnLB);
     set(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, g_cfg.btnRB);
-    set(SDL_CONTROLLER_BUTTON_START,         g_cfg.btnStart);
-    set(SDL_CONTROLLER_BUTTON_BACK,          g_cfg.btnBack);
+    //set(SDL_CONTROLLER_AXIS_TRIGGERLEFT,   g_cfg.btnLT);
+    //set(SDL_CONTROLLER_AXIS_TRIGGERRIGHT,  g_cfg.btnRT);
+    set(SDL_CONTROLLER_BUTTON_BACK,         g_cfg.btnBack);
+    set(SDL_CONTROLLER_BUTTON_START,          g_cfg.btnStart);
     set(SDL_CONTROLLER_BUTTON_LEFTSTICK,     g_cfg.btnLS);
     set(SDL_CONTROLLER_BUTTON_RIGHTSTICK,    g_cfg.btnRS);
 
