@@ -95,9 +95,9 @@ static void EnsureInit()
 {
     if (g_initDone) return;
     g_initDone = true;                 // set first: never retry a failed init
-    Config_Load("PadWithin.ini");      // load tunables (defaults if absent)
+    Config_Load("dmc3se_config.ini");      // load tunables (defaults if absent)
     if (g_cfg.enableLog)               // open log only if ini asks for it
-        Log_Init("PadWithin.log");
+        Log_Init("dmc3se.log");
     LOG("EnsureInit: deferred init (log enabled via ini)");
     // NOTE: Proxy_HookGameIAT_GetProcAddress() was a one-off diagnostic used
     // during axis-detection investigation (checking for dynamic legacy-
