@@ -7,14 +7,13 @@ Works with **any SDL2-supported controller** — DualSense, DualShock 4, Xbox pa
 ## Features
 
 - **Works with any pad SDL2 supports**, no XInput wrapper required.
-- **Left and Right analog are properly working**.
 - **Fully configurable** via a plain-text ini: sensitivity, deadzone, stick range calibration for worn sticks, button remapping, axis inversion, and more — no recompiling needed.
 - **Retail/Steam compatible** (DMC3SE.exe v1.3 update is required).
 
 ## Issues
 
 - Controller hotplugging isn't implemented yet.
-- All buttons are working except for the triggers (LT/RT/L2/R2) for now.
+- Left and Right Analog mapping is not consistent to different controllers.
 
 ## Installation
 
