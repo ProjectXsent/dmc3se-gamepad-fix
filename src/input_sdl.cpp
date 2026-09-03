@@ -282,8 +282,8 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
     };
 
     // --- movement: left stick -> X / Y ---
-    float lx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTX) / 32767.f;
-    float ly = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTY) / 32767.f;
+    float lx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTX) / 32767.f;
+    float ly = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTY) / 32767.f;
     ApplyMaxInput(lx, ly, g_cfg.moveMaxRange);
     RadialDeadzone(lx, ly, g_cfg.moveDeadzone);
     AxisSnap(lx, ly);
@@ -291,12 +291,12 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
     W(0, 0, AxisDI(lx));   // X
     W(1, 4, AxisDI(ly));   // Y
 
-    // --- camera: right stick -> Rx / Ry ---
+    // --- Camera: Right Stick -> Rx / Ry ---
     // CameraSensitivity is a percent where 50 = normal speed (1.0x).
     float camMul = g_cfg.cameraSensitivity / 50.f;
     if (camMul < 0.f) camMul = 0.f;
-    float rx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTX) / 32767.f;
-    float ry = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTY) / 32767.f;
+    float rx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTX) / 32767.f;
+    float ry = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTY) / 32767.f;
     ApplyMaxInput(rx, ry, g_cfg.cameraMaxRange);
     RadialDeadzone(rx, ry, g_cfg.cameraDeadzone);
     AxisSnap(rx, ry);
@@ -305,24 +305,36 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
     if (g_cfg.invertCameraX) rx = -rx;
     if (g_cfg.invertCameraY) ry = -ry;
 
-    // --- triggers -> digital DirectInput buttons ---
-    auto setTrigger = [&](SDL_GameControllerAxis axis, int idx){
-        if (idx < 0 || idx >= 32)
-            return;
+    // --- Triggers -> DirectInput Buttons ---
+    const Sint16 triggerThreshold = 16384; // Approximately 50% pressed
+    Sint16 rt = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+    Sint16 lt = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
 
-        const Sint16 value =
-            SDL_GameControllerGetAxis(g_pad, axis);
+    // Left Trigger
+    if (lt >= triggerThreshold)
+    {
+        base[48 + g_cfg.btnLT] = 0x80;
+    }
 
-        if (value < 16384)
-            return;
+    // Right Trigger
+    if (rt >= triggerThreshold)
+    {
+        base[48 + g_cfg.btnRT] = 0x80;
+    }
 
-        int ofs = 48 + idx;
+    if (rt < 0.f) rt = 0.f;
+    if (lt < 0.f) lt = 0.f;
+    float z = g_cfg.swapTriggers ? (lt - rt) : (rt - lt);
 
-        if (ofs >= 0 && ofs < (int)sizeof(DIJOYSTATE))
-            base[ofs] = 0x80;
-        };
-    setTrigger(SDL_CONTROLLER_AXIS_TRIGGERLEFT,     g_cfg.btnLT);
-    setTrigger(SDL_CONTROLLER_AXIS_TRIGGERRIGHT,    g_cfg.btnRT);
+    if (!g_cfg.cameraOnZRz) {
+        W(3, 12, AxisDI(rx));  // Rx camera H
+        W(4, 16, AxisDI(ry));  // Ry camera V
+        W(2, 8,  AxisDI(z));   // Z  triggers
+    } else {
+        W(2, 8,  AxisDI(rx));
+        W(5, 20, AxisDI(ry));
+        W(3, 12, AxisDI(z));
+    }
 
     // --- buttons: SDL GameController -> button at enumerated offset ---
     auto set = [&](SDL_GameControllerButton b, int idx){
