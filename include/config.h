@@ -71,8 +71,8 @@ struct Config
     int btnY  = 3;
     int btnLB = 4;
     int btnRB = 5;
-    //int btnLT = 6;
-    //int btnRT = 7;
+    int btnLT = 6;
+    int btnRT = 7;
     int btnBack = 8;
     int btnStart = 9;
     int btnLS = 10;
