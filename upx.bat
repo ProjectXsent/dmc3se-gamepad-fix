@@ -1,1 +1,0 @@
-upx.exe -d pop2.exe
