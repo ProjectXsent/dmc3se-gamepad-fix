@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
-project(pop2_gamepad LANGUAGES CXX)
+project(dmc3se_gamepad_fix LANGUAGES CXX)
 
 # -----------------------------------------------------------------------------
-# IMPORTANT: this MUST build 32-bit (x86). pop2.exe is PE32 / Intel 80386.
+# IMPORTANT: this MUST build 32-bit (x86).
 # Configure with, e.g.:
 #     cmake -B build -A Win32 -DSDL2_DIR=<path-to-SDL2-cmake>
 #     cmake --build build --config Release
@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
-    message(FATAL_ERROR "pop2_gamepad must be built as 32-bit (x86). "
+    message(FATAL_ERROR "dmc3se_gamepad_fix must be built as 32-bit (x86). "
                         "Re-run cmake with -A Win32.")
 endif()
 
