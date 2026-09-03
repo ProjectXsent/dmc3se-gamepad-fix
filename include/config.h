@@ -65,16 +65,18 @@ struct Config
 
     // --- button map: rgbButtons index (0..31) for each SDL button ---
     // Values are WW "Btn N" minus 1. -1 = unmapped.
-    int btnA  = 0;   // Btn1  Roll/Jump
-    int btnB  = 1;   // Btn2  Pickup/Climb
-    int btnX  = 2;   // Btn3  Sword Attack
-    int btnY  = 3;   // Btn4  Grab/2nd weapon
-    int btnLB = 4;   // Btn5  Rewind/Slowdown
-    int btnRB = 5;   // Btn6  Walling/Block
-    int btnStart = 7;   // Btn8  Start
-    int btnBack  = 11;  // Btn12 Navigation Map
-    int btnLS = 8;   // Btn9  (free / Walk toggle)
-    int btnRS = 9;   // Btn10 Reset Camera
+    int btnA  = 0;
+    int btnB  = 1;
+    int btnX  = 2;
+    int btnY  = 3;
+    int btnLB = 4;
+    int btnRB = 5;
+    //int btnLT = 6;
+    //int btnRT = 7;
+    int btnBack = 8;
+    int btnStart = 9;
+    int btnLS = 10;
+    int btnRS = 11;
 };
 
 // Global config instance.
