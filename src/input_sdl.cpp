@@ -349,10 +349,10 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
     set(SDL_CONTROLLER_BUTTON_Y,             g_cfg.btnB);
     set(SDL_CONTROLLER_BUTTON_LEFTSHOULDER,  g_cfg.btnLB);
     set(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, g_cfg.btnRB);
-    set(SDL_CONTROLLER_BUTTON_BACK,          g_cfg.btnBack);
-    set(SDL_CONTROLLER_BUTTON_START,         g_cfg.btnStart);
-    set(SDL_CONTROLLER_BUTTON_LEFTSTICK,     g_cfg.btnLS);
-    set(SDL_CONTROLLER_BUTTON_RIGHTSTICK,    g_cfg.btnRS);
+    set(SDL_CONTROLLER_BUTTON_BACK,          g_cfg.btnLS);
+    set(SDL_CONTROLLER_BUTTON_START,         g_cfg.btnRS);
+    set(SDL_CONTROLLER_BUTTON_LEFTSTICK,     g_cfg.btnBack);
+    set(SDL_CONTROLLER_BUTTON_RIGHTSTICK,    g_cfg.btnStart);
 
     // --- D-pad -> POV hat (hundredths of a degree, clockwise from up) ---
     bool up    = SDL_GameControllerGetButton(g_pad, SDL_CONTROLLER_BUTTON_DPAD_UP);
