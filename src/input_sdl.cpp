@@ -282,8 +282,8 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
     };
 
     // --- movement: left stick -> X / Y ---
-    float lx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTX) / 32767.f;
-    float ly = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTY) / 32767.f;
+    float lx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTX) / 32767.f;
+    float ly = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTY) / 32767.f;
     ApplyMaxInput(lx, ly, g_cfg.moveMaxRange);
     RadialDeadzone(lx, ly, g_cfg.moveDeadzone);
     AxisSnap(lx, ly);
@@ -295,8 +295,8 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
     // CameraSensitivity is a percent where 50 = normal speed (1.0x).
     float camMul = g_cfg.cameraSensitivity / 50.f;
     if (camMul < 0.f) camMul = 0.f;
-    float rx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTX) / 32767.f;
-    float ry = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_LEFTY) / 32767.f;
+    float rx = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTX) / 32767.f;
+    float ry = SDL_GameControllerGetAxis(g_pad, SDL_CONTROLLER_AXIS_RIGHTY) / 32767.f;
     ApplyMaxInput(rx, ry, g_cfg.cameraMaxRange);
     RadialDeadzone(rx, ry, g_cfg.cameraDeadzone);
     AxisSnap(rx, ry);
