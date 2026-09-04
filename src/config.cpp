@@ -70,6 +70,7 @@ void Config_Load(const char* iniName)
     g_cfg.invertCameraY = GetB("Axes", "InvertCameraY", g_cfg.invertCameraY, p);
     g_cfg.invertCameraX = GetB("Axes", "InvertCameraX", g_cfg.invertCameraX, p);
     g_cfg.swapTriggers  = GetB("Axes", "SwapTriggers",  g_cfg.swapTriggers,  p);
+    g_cfg.swapSticks    = GetB("Axes", "SwapSticks",    g_cfg.swapSticks,    p);
     g_cfg.cameraOnZRz   = GetB("Axes", "CameraOnZRz",   g_cfg.cameraOnZRz,   p);
 
     g_cfg.spoofVidPid = GetB("Spoof", "SpoofVidPid", g_cfg.spoofVidPid, p);
