@@ -336,6 +336,20 @@ void Proxy_FillJoyState(DIJOYSTATE* js)
         W(3, 12, AxisDI(z));
     }
 
+    // Swap Sticks
+    if (!g_cfg.swapSticks) {
+        W(0, 0, AxisDI(lx));   // X
+        W(1, 4, AxisDI(ly));   // Y
+        W(3, 12, AxisDI(rx));  // Rx camera H
+        W(4, 16, AxisDI(ry));  // Ry camera V
+    }
+    else {
+        W(0, 0, AxisDI(rx));   // X
+        W(1, 4, AxisDI(ry));   // Y
+        W(3, 12, AxisDI(lx));  // Rx camera H
+        W(4, 16, AxisDI(ly));  // Ry camera V
+    }
+
     // --- buttons: SDL GameController -> button at enumerated offset ---
     auto set = [&](SDL_GameControllerButton b, int idx){
         if (idx < 0 || idx >= 32) return;
