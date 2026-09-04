@@ -46,6 +46,10 @@ struct Config
     // If false: RT -> Z(+), LT -> Z(-).  If true: swapped.
     bool swapTriggers = false;
 
+    // --- swap sticks ---
+    // If false: L<->R=0.  If true: L<->R=1.
+    bool swapSticks = false;
+
     // --- axis routing (which DIJOYSTATE fields the sticks/triggers write) ---
     // Some games read the right stick on Z/Rz instead of Rx/Ry. Toggle if the
     // camera stick behaves wrong.
