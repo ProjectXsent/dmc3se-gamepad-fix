@@ -1,10 +1,12 @@
-# DMC3Input – SDL controller support for Devil May Cry 3 Special Edition
+# DMC3Input
 
-A `dinput8.dll` proxy. Drop it in the game folder and the game sees one
-DirectInput joystick that is actually an SDL game controller (Xbox, DualShock/DualSense,
+A `dinput8.dll` proxy for Devil May Cry 3 Special Edition. 
+
+Drop it in the game folder and the game will see one DirectInput joystick 
+that is actually an SDL game controller (Xbox, DualShock/DualSense,
 Switch Pro, 8BitDo, etc.). Every other DirectInput call is forwarded to the real system DLL.
 
-## Build
+## Building
 
 Requirements: Visual Studio 2022, CMake, vcpkg (`vcpkg install sdl2:x86-windows`).
 
@@ -20,8 +22,5 @@ Copy those three files into the game folder (next to the game exe). Uninstall by
 
 ## Mapping
 
-The game's default bindings are expressed as DirectInput button *numbers*, so the layout
-matters. Two presets are provided (`Preset=xbox` / `ps2`); if buttons land wrong, set
-individual `ButtonN=` entries in `[Buttons]`. `[Axes]` lets you move the right stick between
-Rx/Ry and Z/Rz. LT/RT are exposed as real buttons, addressing the "transform button has no
-free key" complaint. Extra SDL mappings can go in `gamecontrollerdb.txt` next to the DLL.
+This is already configured so there's no need to edit the buttons in `DMC3Input.ini`
+Extra SDL mappings can go in `gamecontrollerdb.txt` next to the DLL.
