@@ -19,7 +19,7 @@ It must be **32-bit** (`-A Win32`).
 
 Download the latest release and extract files into the game folder (next to the game exe). 
 
-Deleting `dinput8.dll` will disable/unistall this fix.
+Deleting `dinput8.dll` will disable/uninstall this fix.
 
 ## Mapping
 
