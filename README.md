@@ -15,10 +15,11 @@ Run `build.bat`.
 Output in `build86/Release/`: `dinput8.dll`, `SDL2.dll`, `DMC3Input.ini`.
 It must be **32-bit** (`-A Win32`).
 
-## Install
+## Installation
 
-Copy those three files into the game folder (next to the game exe). Uninstall by deleting
-`dinput8.dll`.
+Download the latest release and extract files into the game folder (next to the game exe). 
+
+Deleting `dinput8.dll` will disable/unistall this fix.
 
 ## Mapping
 
