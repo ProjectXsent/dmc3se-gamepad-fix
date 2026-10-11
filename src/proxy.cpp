@@ -28,9 +28,9 @@ static const GUID kGuidInstance = {0x6f1d2b40, 0x5a37, 0x4c0e, {0x9b, 0x53, 0x0e
 static const GUID kGuidProduct  = {0x6f1d2b41, 0x5a37, 0x4c0e, {0x9b, 0x53, 0x0e, 0x1a, 0x4f, 0x7c, 0x2d, 0x91}};
 
 static const DWORD kDevType = DI8DEVTYPE_GAMEPAD | (DI8DEVTYPEGAMEPAD_STANDARD << 8) | DIDEVTYPE_HID;
-static const char* kDevName = "DMC3Input SDL Gamepad";
+static const char* kDevName = "SDL Gamepad";
 
-// ------------------------------------------------------------ A/W traits ---
+// ----- A/W traits -----
 
 template <bool W> struct Tr;
 
@@ -104,7 +104,7 @@ static void FillInstance(Inst& i) {
     CopyStr(i.tszProductName,  MAX_PATH, kDevName);
 }
 
-// ----------------------------------------------------- the virtual device ---
+// ----- the virtual device -----
 
 template <bool W>
 class VirtualDevice final : public Tr<W>::Dev {
@@ -395,7 +395,7 @@ public:
     HRESULT STDMETHODCALLTYPE GetImageInfo(typename T::ImgHdr) override { return DIERR_UNSUPPORTED; }
 };
 
-// ------------------------------------------------- IDirectInput8 wrapper ---
+// ----- IDirectInput8 wrapper -----
 
 template <bool W>
 class Proxy final : public Tr<W>::DI {
@@ -459,7 +459,7 @@ public:
         if (!cb) return real_->EnumDevices(type, cb, ref, flags);
         const bool wantPad = (type == DI8DEVCLASS_ALL || type == DI8DEVCLASS_GAMECTRL) &&
                              !(flags & DIEDFL_FORCEFEEDBACK);
-        const bool expose  = wantPad && (PadConnected() || (GetConfig().alwaysExpose && !(flags & DIEDFL_ATTACHEDONLY)));
+        const bool expose = wantPad && (PadConnected() || GetConfig().alwaysExpose);
 
         EnumState st{{cb, ref, expose && GetConfig().hideReal}, false};
         HRESULT hr = real_->EnumDevices(type, &EnumThunkTrack, &st, flags);
@@ -491,7 +491,7 @@ public:
     }
 };
 
-// ------------------------------------------------------------- exports ---
+// ----- exports -----
 
 using PFN_Create = HRESULT(WINAPI*)(HINSTANCE, DWORD, REFIID, LPVOID*, LPUNKNOWN);
 

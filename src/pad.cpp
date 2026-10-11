@@ -76,6 +76,32 @@ static int ReadName(const wchar_t* sec, const wchar_t* key, const Name (&tbl)[N]
     return def;
 }
 
+template <size_t N>
+static int Lookup(const std::string& s, const Name (&tbl)[N], int def) {
+    if (s.empty()) return def;
+    const std::wstring w(s.begin(), s.end());   // names are ASCII
+    for (const Name& e : tbl)
+        if (!_wcsicmp(w.c_str(), e.n)) return e.v;
+    return def;
+}
+
+// Turn the string defaults in Config into buttonMap/axisMap.
+static void ApplyStrings(Config& c) {
+    for (int& b : c.buttonMap) b = SRC_NONE;
+    for (int& a : c.axisMap) a = AX_NONE;
+
+    const std::string* axes[8] = {&c.X, &c.Y, &c.Z, &c.Rx,
+                                  &c.Ry, &c.Rz, &c.Slider0, &c.Slider1};
+    for (int i = 0; i < 8; ++i)
+        c.axisMap[i] = Lookup(*axes[i], kAxisNames, AX_NONE);
+
+    const std::string* btn[12] = {&c.Button0, &c.Button1, &c.Button2,  &c.Button3,
+                                  &c.Button4, &c.Button5, &c.Button6,  &c.Button7,
+                                  &c.Button8, &c.Button9, &c.Button10, &c.Button11};
+    for (int i = 0; i < 12; ++i)
+        c.buttonMap[i] = Lookup(*btn[i], kButtonNames, SRC_NONE);
+}
+
 static void ApplyPreset(Config& c, bool ps2) {
     for (int& b : c.buttonMap) b = SRC_NONE;
     for (int& a : c.axisMap) a = AX_NONE;
@@ -116,8 +142,10 @@ static void ApplyPreset(Config& c, bool ps2) {
                          SDL_CONTROLLER_BUTTON_LEFTSTICK,
                          SDL_CONTROLLER_BUTTON_RIGHTSTICK};
         for (int i = 0; i < 12; ++i) c.buttonMap[i] = b[i];
-        c.axisMap[0] = AX_LX; c.axisMap[1] = AX_LY;
-        c.axisMap[2] = AX_RX; c.axisMap[5] = AX_RY;
+        c.axisMap[0] = AX_LX;
+        c.axisMap[1] = AX_LY;
+        c.axisMap[2] = AX_RX;
+        c.axisMap[5] = AX_RY;
     }
 }
 
@@ -126,9 +154,15 @@ static Config LoadConfig() {   // NOTE: must not call Log() (static-init recursi
     const std::wstring ini = ModuleDir() + L"\\DMC3Input.ini";
     const wchar_t* f = ini.c_str();
 
-    wchar_t preset[32] = {};
+    /*wchar_t preset[32] = {};
     GetPrivateProfileStringW(L"General", L"Preset", L"xbox", preset, 32, f);
-    ApplyPreset(c, _wcsicmp(preset, L"ps2") == 0);
+    ApplyPreset(c, _wcsicmp(preset, L"ps2") == 0);*/
+
+    ApplyStrings(c);   // defaults come from the strings in pad.h
+
+    wchar_t preset[32] = {};
+    GetPrivateProfileStringW(L"General", L"Preset", L"", preset, 32, f);
+    if (preset[0]) ApplyPreset(c, _wcsicmp(preset, L"ps2") == 0);
 
     c.log          = GetPrivateProfileIntW(L"General", L"Log", 0, f) != 0;
     c.hideReal     = GetPrivateProfileIntW(L"General", L"HideRealGamepads", 1, f) != 0;
@@ -196,12 +230,27 @@ static void OpenPad() {
     }
 }
 
+// Fallback for when SDL's device-added event never arrives (message window
+// lives on another thread). Cheap: runs at most once a second, only with no pad.
+static void Rescan() {
+    if (g_pad) return;
+    static DWORD last = 0;
+    const DWORD now = GetTickCount();
+    if (now - last < 1000) return;
+    last = now;
+    SDL_JoystickUpdate();   // forces the drivers to re-detect devices
+    OpenPad();              // no-op if nothing is found
+}
+
 static void PumpEvents() {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_CONTROLLERDEVICEADDED) {
+            Log("Event: controller added (index %d)", e.cdevice.which);
             if (!g_pad) OpenPad();
-        } else if (e.type == SDL_CONTROLLERDEVICEREMOVED) {
+        }
+        else if (e.type == SDL_CONTROLLERDEVICEREMOVED) {
+            Log("Event: controller removed (id %d)", (int)e.cdevice.which);
             if (g_pad && e.cdevice.which == g_padId) {
                 Log("Controller removed");
                 SDL_GameControllerClose(g_pad);
@@ -211,6 +260,7 @@ static void PumpEvents() {
             }
         }
     }
+    Rescan();
 }
 
 static bool Ensure() {
